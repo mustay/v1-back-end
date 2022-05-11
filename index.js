@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
+const cors = require('cors')
 const port = 3000;
 
 app.use(express.json());
+
+app.use(cors());
 
 var loki = require("lokijs");
 var db = new loki("example.db");
@@ -29,6 +32,7 @@ app.get("/comments", (req, res) => {
 
 app.post("/comments", (req, res) => {
 	try {
+		console.log(req);
 		const text = req.body?.text;
 		if (!text) {
 			res.statusCode = 400;
@@ -40,6 +44,7 @@ app.post("/comments", (req, res) => {
 		const comment = {
 			user: users[Math.floor(Math.random() * users.length)],
 			text,
+			time: '45 min ago'
 		};
 		comments.insert(comment);
 		return res.send({
